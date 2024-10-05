@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   addCloseButtons();
   toggleTaskStatus();
+  initializeDarkMode();
 });
 
 // Function to create a new task
@@ -72,3 +73,30 @@ function toggleTaskStatus() {
     }
   }, false);
 }
+
+
+function initializeDarkMode() {
+  const modeToggle = document.getElementById('modeToggle');
+  if (modeToggle) {
+    modeToggle.addEventListener('click', toggleDarkMode);
+    
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+      modeToggle.textContent = 'Light Mode';
+    }
+  }
+}
+
+function toggleDarkMode() {
+  const modeToggle = document.getElementById('modeToggle');
+  if (document.body.classList.toggle('dark-mode')) {
+    modeToggle.textContent = 'Light Mode';
+    localStorage.setItem('darkMode', 'enabled');
+  } else {
+    modeToggle.textContent = 'Dark Mode';
+    localStorage.setItem('darkMode', null);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initializeDarkMode);
