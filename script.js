@@ -1,16 +1,15 @@
-// Initialize the to-do list by attaching event listeners to the close buttons
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
+  loadTasksFromLocalStorage();
   addCloseButtons();
   toggleTaskStatus();
   initializeDarkMode();
 });
 
-// Function to create a new task
 function addTask() {
   const taskInput = document.getElementById("taskInput");
   const taskValue = taskInput.value.trim();
 
-  if (taskValue === '') {
+  if (taskValue === "") {
     alert("You must write something!");
     return;
   }
@@ -25,23 +24,69 @@ function addTask() {
   document.getElementById("taskList").appendChild(li);
   taskInput.value = "";
 
-  // Attach close button event to the new task
+  storeTaskInLocalStorage(taskValue, false);
+
   closeSpan.onclick = function () {
     const task = this.parentElement;
+    removeTaskFromLocalStorage(task.textContent.slice(0, -1));
     task.style.display = "none";
   };
 }
 
-// Function to add close buttons to each task
+function storeTaskInLocalStorage(taskText, isChecked) {
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  tasks.push({ text: taskText, checked: isChecked });
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasksFromLocalStorage() {
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  tasks.forEach((task) => {
+    const li = document.createElement("li");
+    li.className = "task";
+    li.textContent = task.text;
+
+    if (task.checked) {
+      li.classList.add("checked");
+    }
+
+    const closeSpan = createCloseButton();
+    li.appendChild(closeSpan);
+
+    document.getElementById("taskList").appendChild(li);
+
+    closeSpan.onclick = function () {
+      const task = this.parentElement;
+      removeTaskFromLocalStorage(task.textContent.slice(0, -1));
+      task.style.display = "none";
+    };
+  });
+}
+
+function removeTaskFromLocalStorage(taskText) {
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  tasks = tasks.filter((t) => t.text !== taskText);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function updateTaskStatusInLocalStorage(taskText, isChecked) {
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  tasks = tasks.map((t) =>
+    t.text === taskText ? { ...t, checked: isChecked } : t
+  );
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
 function addCloseButtons() {
   const tasks = document.getElementsByClassName("task");
   for (let i = 0; i < tasks.length; i++) {
-    const closeSpan = tasks[i].querySelector('.close');
+    const closeSpan = tasks[i].querySelector(".close");
     if (!closeSpan) {
       const span = createCloseButton();
       tasks[i].appendChild(span);
       span.onclick = function () {
         const task = this.parentElement;
+        removeTaskFromLocalStorage(task.textContent.slice(0, -1));
         task.style.display = "none";
       };
     }
@@ -51,12 +96,12 @@ function addCloseButtons() {
   for (let i = 0; i < closeButtons.length; i++) {
     closeButtons[i].onclick = function () {
       const task = this.parentElement;
+      removeTaskFromLocalStorage(task.textContent.slice(0, -1));
       task.style.display = "none";
     };
   }
 }
 
-// Helper function to create the close button element
 function createCloseButton() {
   const span = document.createElement("span");
   span.className = "close";
@@ -64,8 +109,8 @@ function createCloseButton() {
   return span;
 }
 
-// Toggle the checked status of tasks
 function toggleTaskStatus() {
+
   const list = document.getElementById('taskList');
   list.addEventListener('click', function (ev) {
     if (ev.target.tagName === 'LI') {
@@ -100,3 +145,21 @@ function toggleDarkMode() {
 }
 
 document.addEventListener('DOMContentLoaded', initializeDarkMode);
+
+  const list = document.getElementById("taskList");
+  list.addEventListener(
+    "click",
+    function (ev) {
+      if (ev.target.tagName === "LI") {
+        ev.target.classList.toggle("checked");
+        const isChecked = ev.target.classList.contains("checked");
+        updateTaskStatusInLocalStorage(
+          ev.target.textContent.slice(0, -1),
+          isChecked
+        );
+      }
+    },
+    false
+  );
+}
+
