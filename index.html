@@ -1,26 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
-  <title>Todo List</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div id="todo-header" class="header">
-    <h2>My To-Do List</h2>
-    <input type="text" id="taskInput" placeholder="Enter today's tasks...">
-    <button type="button" onclick="addTask()" class="addBtn">Add</button>
-  </div>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <title>Todo List</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="todo-header" class="header">
+      <h2>My To-Do List</h2>
+      <input type="text" id="taskInput" placeholder="Enter today's tasks..." />
+      <button type="button" onclick="addTask()" class="addBtn">Add</button>
+    </div>
 
-  <ul id="taskList">
-    <li class="task">Gym<span class="close">&times;</span></li>
-    <li class="task checked">Clear bills<span class="close">&times;</span></li>
-    <li class="task">Buy vegetables<span class="close">&times;</span></li>
-    <li class="task">Read novel<span class="close">&times;</span></li>
-    <li class="task">Room cleaning<span class="close">&times;</span></li>
-  </ul>
+    <ul id="taskList"></ul>
 
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
