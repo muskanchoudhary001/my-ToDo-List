@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   loadTasksFromLocalStorage();
   addCloseButtons();
-  toggleTaskStatus();
   initializeDarkMode();
 });
 
@@ -109,16 +108,6 @@ function createCloseButton() {
   return span;
 }
 
-function toggleTaskStatus() {
-
-  const list = document.getElementById('taskList');
-  list.addEventListener('click', function (ev) {
-    if (ev.target.tagName === 'LI') {
-      ev.target.classList.toggle('checked');
-    }
-  }, false);
-}
-
 
 function initializeDarkMode() {
   const modeToggle = document.getElementById('modeToggle');
@@ -161,5 +150,5 @@ document.addEventListener('DOMContentLoaded', initializeDarkMode);
     },
     false
   );
-}
+
 
